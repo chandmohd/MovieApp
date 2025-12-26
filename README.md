@@ -72,8 +72,6 @@ Contributions are welcome! If you'd like to improve the app, please follow these
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## 📞 Contact
+## Contact
 
-Your Name - [@yourhandle](https://twitter.com/yourhandle) - email@example.com
-
-Project Link: [https://github.com/your-username/movie-app](https://github.com/your-username/movie-app)
+Chand Mohd (https://twitter.com/chandmohd0305)
