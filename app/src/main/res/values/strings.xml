@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MovieApp</string>
+    <string name="now_playing_movies">Now Playing Movies</string>
+    <string name="no_movies_found">No movies found</string>
+    <string name="retry">Retry</string>
+    <string name="release_date_label">Release: %1$s</string>
+    <string name="rating_label">Rating: %1$.1f</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="movie_detail">Movie Detail</string>
+    <string name="overview_label">Overview</string>
+    <string name="vote_count_label">Votes: %1$d</string>
+</resources>
