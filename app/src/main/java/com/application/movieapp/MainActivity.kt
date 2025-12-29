@@ -21,6 +21,9 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -31,6 +34,7 @@ import com.application.movieapp.viewmodel.MovieUiState
 import com.application.movieapp.viewmodel.MovieViewModel
 
 import com.application.movieapp.ui.theme.MovieAppTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 

@@ -30,6 +30,7 @@ import com.application.movieapp.viewmodel.MovieViewModel
 
 import androidx.compose.ui.res.stringResource
 import com.application.movieapp.R
+import com.application.movieapp.ui.components.CircularRatingIndicator
 
 @Composable
 fun Modifier.shimmerEffect(): Modifier {
@@ -253,14 +254,27 @@ fun MovieItem(
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = movie.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = movie.title,
+                        style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    CircularRatingIndicator(
+                        voteAverage = movie.voteAverage,
+                        size = 32.dp,
+                        strokeWidth = 3.dp
+                    )
+                }
                 
                 Column {
                     Text(
@@ -269,19 +283,6 @@ fun MovieItem(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1
                     )
-                    Spacer(modifier = Modifier.height(2.dp))
-                    Surface(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = MaterialTheme.shapes.extraSmall
-                    ) {
-                        Text(
-                            text = stringResource(R.string.rating_label, movie.voteAverage),
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                        )
-                    }
                 }
             }
         }

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.application.movieapp.R
 import com.application.movieapp.model.Movie
+import com.application.movieapp.ui.components.CircularRatingIndicator
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -61,33 +63,32 @@ fun DetailScreen(
             }
             
             Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = movie.title,
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                
-                Spacer(modifier = Modifier.height(8.dp))
-                
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = stringResource(R.string.release_date_label, movie.releaseDate),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = stringResource(R.string.rating_label, movie.voteAverage),
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = movie.title,
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = stringResource(R.string.release_date_label, movie.releaseDate),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Text(
+                            text = stringResource(R.string.vote_count_label, movie.voteCount),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                    CircularRatingIndicator(
+                        voteAverage = movie.voteAverage,
+                        size = 60.dp,
+                        strokeWidth = 6.dp
                     )
                 }
-
-                Text(
-                    text = stringResource(R.string.vote_count_label, movie.voteCount),
-                    style = MaterialTheme.typography.bodySmall
-                )
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 
