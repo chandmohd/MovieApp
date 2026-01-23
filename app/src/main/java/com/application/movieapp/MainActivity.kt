@@ -53,10 +53,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MovieAppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
                     val navController = rememberNavController()
                     val uiState by viewModel.uiState.collectAsState()
                     
@@ -104,7 +100,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-            }
         }
     }
 }
