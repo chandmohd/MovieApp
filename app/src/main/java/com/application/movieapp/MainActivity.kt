@@ -21,21 +21,32 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import com.application.movieapp.di.AppContainer
+import com.application.movieapp.model.Movie
 import com.application.movieapp.ui.DetailScreen
 import com.application.movieapp.ui.HomeScreen
 import com.application.movieapp.viewmodel.MovieUiState
 import com.application.movieapp.viewmodel.MovieViewModel
 
 import com.application.movieapp.ui.theme.MovieAppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
+
+data object MovieList
+data class MovieDetails(val movie : Movie)
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MovieViewModel by viewModels {
@@ -53,52 +64,81 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MovieAppTheme {
-                    val navController = rememberNavController()
+                val backState = remember { mutableStateListOf<Any> (MovieList) }
                     val uiState by viewModel.uiState.collectAsState()
-                    
-                    SharedTransitionLayout {
-                        NavHost(
-                            navController = navController, 
-                            startDestination = "home",
-                            enterTransition = {
-                                slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(500)) + fadeIn(animationSpec = tween(500))
-                            },
-                            exitTransition = {
-                                slideOutHorizontally(targetOffsetX = { -it }, animationSpec = tween(500)) + fadeOut(animationSpec = tween(500))
-                            },
-                            popEnterTransition = {
-                                slideInHorizontally(initialOffsetX = { -it }, animationSpec = tween(500)) + fadeIn(animationSpec = tween(500))
-                            },
-                            popExitTransition = {
-                                slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(500)) + fadeOut(animationSpec = tween(500))
-                            }
-                        ) {
-                            composable("home") {
-                                HomeScreen(
-                                    viewModel = viewModel,
+
+                SharedTransitionLayout {
+                    NavDisplay(
+                        backStack = backState,
+                        onBack = {
+                            backState.removeLastOrNull()
+                        },
+                        entryProvider = { key ->
+                            when (key) {
+                                is MovieList ->
+                                    NavEntry(key) {
+                                        HomeScreen(
+                                            viewModel = viewModel,
                                     sharedTransitionScope = this@SharedTransitionLayout,
-                                    animatedContentScope = this@composable,
                                     onMovieClick = { movie ->
-                                        navController.navigate("detail/${movie.id}")
+                                        backState.add(MovieDetails(movie))
+                                    })
                                     }
-                                )
-                            }
-                            composable("detail/{movieId}") { backStackEntry ->
-                                val movieId = backStackEntry.arguments?.getString("movieId")?.toIntOrNull()
-                                if (uiState is MovieUiState.Success) {
-                                    val movie = (uiState as MovieUiState.Success).movies.find { it.id == movieId }
-                                    movie?.let {
-                                        DetailScreen(
-                                            movie = it,
-                                            sharedTransitionScope = this@SharedTransitionLayout,
-                                            animatedContentScope = this@composable,
-                                            onBackClick = { navController.popBackStack() }
-                                        )
+                                is MovieDetails ->
+                                    NavEntry(key) {
+                                        DetailScreen(movie = key.movie, sharedTransitionScope = this@SharedTransitionLayout, onBackClick = { backState.removeLastOrNull() })
                                     }
-                                }
+                                else -> error("Unknown key: $key")
                             }
                         }
-                    }
+
+                    )
+                }
+                    
+//                    SharedTransitionLayout {
+//
+////                        NavHost(
+////                            navController = navController,
+////                            startDestination = "home",
+////                            enterTransition = {
+////                                slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(500)) + fadeIn(animationSpec = tween(500))
+////                            },
+////                            exitTransition = {
+////                                slideOutHorizontally(targetOffsetX = { -it }, animationSpec = tween(500)) + fadeOut(animationSpec = tween(500))
+////                            },
+////                            popEnterTransition = {
+////                                slideInHorizontally(initialOffsetX = { -it }, animationSpec = tween(500)) + fadeIn(animationSpec = tween(500))
+////                            },
+////                            popExitTransition = {
+////                                slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(500)) + fadeOut(animationSpec = tween(500))
+////                            }
+////                        ) {
+////                            composable("home") {
+////                                HomeScreen(
+////                                    viewModel = viewModel,
+////                                    sharedTransitionScope = this@SharedTransitionLayout,
+////                                    animatedContentScope = this@composable,
+////                                    onMovieClick = { movie ->
+////                                        navController.navigate("detail/${movie.id}")
+////                                    }
+////                                )
+////                            }
+////                            composable("detail/{movieId}") { backStackEntry ->
+////                                val movieId = backStackEntry.arguments?.getString("movieId")?.toIntOrNull()
+////                                if (uiState is MovieUiState.Success) {
+////                                    val movie = (uiState as MovieUiState.Success).movies.find { it.id == movieId }
+////                                    movie?.let {
+////                                        DetailScreen(
+////                                            movie = it,
+////                                            sharedTransitionScope = this@SharedTransitionLayout,
+////                                            animatedContentScope = this@composable,
+////                                            onBackClick = { navController.popBackStack() }
+////                                        )
+////                                    }
+////                                }
+////                            }
+////                        }
+//                    }
                 }
         }
     }

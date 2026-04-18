@@ -26,7 +26,6 @@ import com.application.movieapp.ui.components.CircularRatingIndicator
 fun DetailScreen(
     movie: Movie, 
     sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     onBackClick: () -> Unit
 ) {
     Scaffold(
@@ -53,11 +52,7 @@ fun DetailScreen(
                     contentDescription = movie.title,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(250.dp)
-                        .sharedElement(
-                            rememberSharedContentState(key = "image-${movie.id}"),
-                            animatedVisibilityScope = animatedContentScope
-                        ),
+                        .height(250.dp),
                     contentScale = ContentScale.Crop
                 )
             }

@@ -94,7 +94,6 @@ fun Modifier.shimmerEffect(): Modifier {
 fun HomeScreen(
     viewModel: MovieViewModel, 
     sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     onMovieClick: (Movie) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -121,7 +120,6 @@ fun HomeScreen(
                         MovieGrid(
                             movies = state.movies, 
                             sharedTransitionScope = sharedTransitionScope,
-                            animatedContentScope = animatedContentScope,
                             onMovieClick = onMovieClick
                         )
                     }
@@ -138,7 +136,6 @@ fun HomeScreen(
                             MovieGrid(
                                 movies = state.bookmarkedMovies,
                                 sharedTransitionScope = sharedTransitionScope,
-                                animatedContentScope = animatedContentScope,
                                 onMovieClick = onMovieClick
                             )
                         }
@@ -228,7 +225,6 @@ fun ShimmerMovieItem() {
 fun MovieGrid(
     movies: List<Movie>, 
     sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     onMovieClick: (Movie) -> Unit
 ) {
     LazyVerticalGrid(
@@ -241,7 +237,6 @@ fun MovieGrid(
             MovieItem(
                 movie = movie, 
                 sharedTransitionScope = sharedTransitionScope,
-                animatedContentScope = animatedContentScope,
                 onMovieClick = onMovieClick
             )
         }
@@ -253,7 +248,6 @@ fun MovieGrid(
 fun MovieItem(
     movie: Movie, 
     sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     onMovieClick: (Movie) -> Unit
 ) {
     ElevatedCard(
@@ -278,11 +272,7 @@ fun MovieItem(
                     contentDescription = movie.title,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(210.dp)
-                        .sharedElement(
-                            rememberSharedContentState(key = "image-${movie.id}"),
-                            animatedVisibilityScope = animatedContentScope
-                        ),
+                        .height(210.dp),
                     contentScale = ContentScale.Crop
                 )
             }
